@@ -9,7 +9,7 @@ This is beta software, and the API *will* change.
 A cli exists in `cmd/schematype`, install via `go install github.com/snikch/schematype/cmd/schematype`.
 
 ```
-cat my_schema.json | schematype | gofmt
+cat examples/schema.json | schematype | gofmt
 ```
 
 ```go
@@ -24,7 +24,7 @@ type MyType struct {
 Set the type and name with flags.
 
 ```
-cat my_schema.json | schematype --name SomeType --package types | gofmt
+cat examples/schema.json | schematype --name SomeType --package types | gofmt
 ```
 
 ```go
