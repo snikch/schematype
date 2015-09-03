@@ -2,6 +2,8 @@
 
 Automatically generate Go types from JSON schema.
 
+This is beta software, and the API *will* change.
+
 # CLI
 
 A cli exists in `cmd/schematype`, install via `go install github.com/snikch/schematype/cmd/schematype`.
