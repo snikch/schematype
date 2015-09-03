@@ -21,7 +21,9 @@ type MyType struct {
 }
 ```
 
-Set the type and name with flags.
+## Setting Type and Package names
+
+Set the type and package with flags.
 
 ```
 cat examples/schema.json | schematype --name SomeType --package types | gofmt
@@ -35,3 +37,12 @@ type SomeType struct {
 	Name        string  `json:"name"`                  // The name
 }
 ```
+
+## Multiple files
+
+Read all schema json files in `types/schemas/*.json` and output them to `types/`. Each schema will get its own `.go` file with the same name as the `.json` schema file.
+
+```
+for filename in types/schemas/*.json; cat $filename | schematype --name=`basename $filename .json` --package=types | gofmt > types/`basename $filename .json`.go
+```
+
