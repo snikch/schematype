@@ -67,31 +67,17 @@ func (s SchemaProperty) Fields() []NamedProperty {
 func (s NamedProperty) GoType() (string, error) {
 	baseType := ""
 	switch s.Type {
-	case "boolean":
-		baseType = "bool"
-	case "string":
-		switch s.Format {
-		case "date-time":
-			baseType = "time.Time"
-		default:
-			baseType = "string"
-		}
-	case "number":
-		baseType = "float64"
-	case "integer":
-		baseType = "int"
 	case "any":
 		baseType = "interface{}"
-	// case "array":
-	// 	if s.Items != {
-	// 		baseType = "[]" + s.Items.GoType()
-	// 	} else {
-	// 		baseType = "[]interface{}"
-	// 	}
+	case "boolean":
+		baseType = "bool"
+	case "integer":
+		baseType = "int"
+	case "number":
+		baseType = "float64"
 	case "object":
 		buf := bytes.NewBufferString("struct {")
 		for name, prop := range s.Properties {
-			// req := contains(name, s.Required) || force
 			err := templates.ExecuteTemplate(buf, "field", NamedProperty{
 				SchemaProperty: prop,
 				Name:           name,
@@ -102,6 +88,19 @@ func (s NamedProperty) GoType() (string, error) {
 		}
 		buf.WriteString("\n}")
 		baseType = buf.String()
+	case "string":
+		switch s.Format {
+		case "date-time":
+			baseType = "time.Time"
+		default:
+			baseType = "string"
+		}
+	// case "array":
+	// 	if s.Items != {
+	// 		baseType = "[]" + s.Items.GoType()
+	// 	} else {
+	// 		baseType = "[]interface{}"
+	// 	}
 	case "null":
 		fallthrough
 	default:
@@ -111,5 +110,6 @@ func (s NamedProperty) GoType() (string, error) {
 	if s.IsRequiredField {
 		return baseType, nil
 	}
+
 	return "*" + baseType, nil
 }
